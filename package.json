@@ -1,0 +1,25 @@
+{
+  "name": "kapusta-bl3-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development  nodemon -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --setupFiles=dotenv/config",
+    "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --setupFiles=dotenv/config --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oleh-Mohylnyi/kapusta-bl3-back.git"
+  },
+  "author": "bl3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oleh-Mohylnyi/kapusta-bl3-back/issues"
+  },
+  "homepage": "https://github.com/Oleh-Mohylnyi/kapusta-bl3-back"
+}
