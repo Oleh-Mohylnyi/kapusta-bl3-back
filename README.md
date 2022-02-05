@@ -21,27 +21,27 @@ email, password - обязательные поля body
 
 - разлогинизация пользователя
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/loguot
-+ токен
+нужен токен
 ответы: 200 / 401
 
 - отправка аватарки пользователя
 patch: https://kapusta-smart-finances.herokuapp.com/api/users/avatar
-+ токен
+нужен токен
 ответы: !!!хероку не хочет!!! / 404
 
 - получение списка транзакций
 get: https://kapusta-smart-finances.herokuapp.com/api/transactions
-+ токен
+нужен токен
 ответы: 200 проблемка!!!! / 401
 
 - добавление транзакции
 post: https://kapusta-smart-finances.herokuapp.com/api/transactions
-+ токен
+нужен токен
 обязательные поля body: type (true/false), sum, category
 не обязательные поля body: date, description, currency
 ответы: 200+обьект / 
 
 - удаление транзакции
 delete: https://kapusta-smart-finances.herokuapp.com/api/transactions/:id
-+ токен
+нужен токен
 ответы: 200+обьект / 404
