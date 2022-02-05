@@ -12,7 +12,7 @@ class EmailService {
         this.link = 'http://localhost:4000'
         break
       case 'production':
-        this.link = 'https://api-35.herokuapp.com'
+        this.link = 'https://kapusta-smart-finances.herokuapp.com'
         break
       default:
         this.link = 'http://localhost:4000'
