@@ -1,5 +1,6 @@
 import pkg from 'mongoose'
-import { v4 as uuidv4 } from 'uuid'
+import cryptoRandomString from 'crypto-random-string';
+
 import bcrypt from 'bcryptjs'
 import gravatar from 'gravatar'
 
@@ -41,7 +42,7 @@ const userSchema = new Schema(
     isVerify: { type: Boolean, default: false },
     verifyTokenEmail: {
       type: String,
-      default: uuidv4(),
+      default: cryptoRandomString({length: 24, type: 'base64'}),
     },
   },
   {
