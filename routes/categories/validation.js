@@ -5,11 +5,8 @@ const { Types } = pkg
 
 const createSchema = Joi.object({
     type: Joi.boolean().required(),
-    sum: Joi.number().min(0).max(1000000).required(),
-    category: Joi.string().required(),
-    date: Joi.date().optional(),
-    description: Joi.string().optional(),
-    currency: Joi.string().optional(),
+    name: Joi.string().required(),
+    description: Joi.string().optional()
 })
 
 const regLimit = /\d+/

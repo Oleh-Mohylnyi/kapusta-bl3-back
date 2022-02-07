@@ -1,8 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary'
 import { promisify } from 'util'
 import { unlink } from 'fs/promises'
-import Users from '../../repository/users'
-import { CLOUDINARY_FOLDER_AVATARS } from '../../lib/constants'
+import Categories from '../../repository/categories'
+import { CLOUDINARY_FOLDER_CATEGORIES_PICTURE } from '../../lib/constants'
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -12,24 +12,24 @@ cloudinary.config({
 })
 
 class CloudStorage {
-  constructor(file, user) {
-    this.userId = user.id
+  constructor(file, categoryId) {
+    this.id = categoryId
     this.filePath = file.path
-    this.idAvatarCloud = user.idAvatarCloud
-    this.folderAvatarsCloud = CLOUDINARY_FOLDER_AVATARS
+    // this.idPictureCloud = user.idPictureCloud
+    this.folderPicturesCloud = CLOUDINARY_FOLDER_CATEGORIES_PICTURE
     this.uploadCloud = promisify(cloudinary.uploader.upload)
   }
 
   async save() {
-    const { public_id: returnedIdAvatarCloud, secure_url: avatarUrlCloud } =
+    const { public_id: returnedIdPictureCloud, secure_url: pictureUrl } =
       await this.uploadCloud(this.filePath, {
-        public_id: this.idAvatarCloud,
-        folder: this.folderAvatarsCloud,
+        public_id: this.idPictureCloud,
+        folder: this.folderPicturesCloud,
       })
-    const newIdAvatarCloud = returnedIdAvatarCloud.replace(`${this.folderAvatars}/`,'')
-    await Users.updateAvatar(this.userId, avatarUrlCloud, newIdAvatarCloud)
+    const newPictureUrl = returnedIdPictureCloud.replace(`${this.folderAvatars}/`,'')
+    await Categories.updatePicture(this.id, pictureUrl, newPictureUrl)
     await this.removeUploadFile(this.filePath)
-    return avatarUrlCloud
+    return pictureUrl
   }
 
   async removeUploadFile(filePath) {

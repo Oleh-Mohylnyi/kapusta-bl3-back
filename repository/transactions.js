@@ -4,7 +4,13 @@ const { Types } = pkg
 
 const getTransactions = async (
   userId,
-  { sortBy, sortByDesc, filter, limit = 10, skip = 0 },
+  {
+    sortBy,
+    sortByDesc,
+    filter,
+    limit = 1000,
+    skip = 0
+  },
 ) => {
   let sortCriteria = null
   const total = await Transaction.find({ owner: userId }).countDocuments()

@@ -1,34 +1,26 @@
 import pkg from 'mongoose'
+import { DEFAULT_CATEGORY_PICTURE } from '../lib/constants'
 
 const { Schema, SchemaTypes, model } = pkg
 
-const transactionSchema = new Schema(
+const categorySchema = new Schema(
   {
     type: {
       type: Boolean,
       required: [true, 'Set income or costs'],
     },
-    sum: {
-      type: Number,
-      min: 0,
-      max: 1000000,
-      required: [true, 'Set sum for transaction'],
+    name: {
+      type: String,
+        required: [true, 'Set name for category'],
     },
-    date: {
-        type: Date,
-        default: new Date(),
-    },
-    category: {
-        type: String,
-        required: [true, 'Set category for transaction'],
+    picture: {
+      type: String,
+      default: null,
+      // default: DEFAULT_CATEGORY_PICTURE,
     },
     description: {
         type: String,
         default: null,
-    },
-    currency: {
-        type: String,
-        default: 'UAH',
     },
     owner: {
         type: SchemaTypes.ObjectId,
@@ -50,6 +42,6 @@ const transactionSchema = new Schema(
   },
 )
 
-const  Transaction = model('transaction', transactionSchema)
+const Category = model('category', categorySchema)
 
-export default Transaction
+export default Category

@@ -7,6 +7,7 @@ import { HttpCode, LIMIT_JSON } from './lib/constants'
 import transactionsRouter from './routes/transactions'
 import authRouter from './routes/auth'
 import usersRouter from './routes/users'
+import categoriesRouter from './routes/categories'
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/transactions', transactionsRouter)
+app.use('/api/categories', categoriesRouter)
 
 app.use((req, res) => {
   res

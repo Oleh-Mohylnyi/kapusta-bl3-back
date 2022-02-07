@@ -11,6 +11,7 @@ import {
 import {
   EmailService,
   SenderSendgrid,
+  SenderNodemailer
 } from '../../service/email'
 import { CustomError } from '../../lib/custom-error'
 
@@ -61,15 +62,13 @@ const repeatEmailForVerifyUser = async (req, res, next) => {
     const { email, name, verifyTokenEmail } = user
     const emailService = new EmailService(
       process.env.NODE_ENV,
-      new SenderSendgrid(),
+      new SenderNodemailer(),
     )
-
     const isSend = await emailService.sendVerifyEmail(
       email,
       name,
       verifyTokenEmail,
     )
-
     if (isSend) {
       return res.status(HttpCode.OK).json({
         status: 'success',
