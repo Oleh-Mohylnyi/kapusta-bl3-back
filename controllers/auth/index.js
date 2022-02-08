@@ -13,11 +13,10 @@ const registration = async (req, res, next) => {
   const { email } = req.body;
   const isUserExist = await authService.isUserExist(email);
   if (isUserExist) {
-    ;
     throw new CustomError(HttpCode.CONFLICT, 'Email is already exist')
   };
   const userData = await authService.create(req.body);
-  newVerifyTokenEmail = cryptoRandomString({ length: 12, type: 'base64' });
+  let newVerifyTokenEmail = cryptoRandomString({ length: 12, type: 'base64' });
   User.updateOne(
     { _id: userData.id },
     { verifyTokenEmail: newVerifyTokenEmail },
