@@ -12,7 +12,7 @@ const findByVerifyToken = async (verifyTokenEmail) => {
   return await User.findOne({ verifyTokenEmail })
 }
 
-const create = async (body, verifyTokenEmail) => {
+const create = async (body) => {
   const user = new User(body)
   return await user.save()
 }
