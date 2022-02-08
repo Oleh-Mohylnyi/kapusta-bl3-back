@@ -6,6 +6,8 @@ import {
   SenderNodemailer
 } from '../../service/email';
 import { CustomError } from '../../lib/custom-error';
+import cryptoRandomString from 'crypto-random-string';
+import User from '../../model/user'
 
 const registration = async (req, res, next) => {
   const { email } = req.body;
@@ -15,6 +17,11 @@ const registration = async (req, res, next) => {
     throw new CustomError(HttpCode.CONFLICT, 'Email is already exist')
   };
   const userData = await authService.create(req.body);
+  newVerifyTokenEmail = cryptoRandomString({ length: 12, type: 'base64' });
+  User.updateOne(
+    { _id: userData.id },
+    { verifyTokenEmail: newVerifyTokenEmail },
+  )
   const emailService = new EmailService(
     process.env.NODE_ENV,
     new SenderNodemailer(),
