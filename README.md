@@ -84,3 +84,27 @@ delete: https://kapusta-smart-finances.herokuapp.com/api/transactions/:id
         ]
     }
 }
+
+
+- получение баланса пользователя
+post: https://kapusta-smart-finances.herokuapp.com/api/reports/balance
+нужен токен
+ответ:
+{
+    "status": "success",
+    "code": 200,
+    "data": {
+        "balance": {
+            "total": [
+                {
+                    "_id": false,
+                    "total": 6000
+                },
+                {
+                    "_id": true,
+                    "total": 80000
+                }
+            ]
+        }
+    }
+}
