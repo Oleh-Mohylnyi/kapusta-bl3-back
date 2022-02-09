@@ -5,6 +5,7 @@ import { CustomError } from '../../lib/custom-error'
 const getTransactions = async (req, res, next) => {
   const { id: userId } = req.user;
   const transactions = await repositoryTransactions.getTransactions(userId, req.query);
+  console.log(req.query);
   res
     .status(HttpCode.OK)
     .json({ status: 'success', code: HttpCode.OK, data: { ...transactions } });

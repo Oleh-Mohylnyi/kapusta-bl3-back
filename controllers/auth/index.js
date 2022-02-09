@@ -7,7 +7,6 @@ import {
 } from '../../service/email';
 import { CustomError } from '../../lib/custom-error';
 import cryptoRandomString from 'crypto-random-string';
-// import User from '../../model/user'
 
 const registration = async (req, res, next) => {
   const { email } = req.body;
@@ -17,10 +16,6 @@ const registration = async (req, res, next) => {
   };
   let verifyTokenEmail = cryptoRandomString({ length: 24, type: 'base64' });
   const userData = await authService.create({ ...req.body, verifyTokenEmail });
-  // User.updateOne(
-  //   { _id: userData.id },
-  //   { verifyTokenEmail: verifyTokenEmail },
-  // )
   const emailService = new EmailService(
     process.env.NODE_ENV,
     new SenderNodemailer(),
@@ -28,9 +23,9 @@ const registration = async (req, res, next) => {
   const isSend = await emailService.sendVerifyEmail(
     email,
     userData.name,
-    userData.verifyTokenEmail,
+    verifyTokenEmail,
   );
-  delete userData.verifyTokenEmail
+  // delete userData.verifyTokenEmail
   res.status(HttpCode.CREATED).json({
     status: 'success',
     code: HttpCode.CREATED,
@@ -45,10 +40,11 @@ const login = async (req, res, next) => {
     throw new CustomError(HttpCode.UNAUTHORIZED, 'Invalid credentials')
   };
   const token = authService.getToken(user);
-  await authService.setToken(user.id, token)
+  await authService.setToken(user.id, token);
+  const { name, avatar } = user;
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { token } })
+    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, token}  })
 };
 
 const logout = async (req, res, next) => {

@@ -15,14 +15,14 @@ const createSchema = Joi.object({
 const regLimit = /\d+/
 
 const querySchema = Joi.object({
-  // limit: Joi.string().pattern(regLimit).optional(),
-  // skip: Joi.number().min(0).optional(),
-  // sortBy: Joi.string().valid('sum', 'date', 'type').optional(),
-  // sortByDesc: Joi.string().valid('sum', 'date', 'type').optional(),
-  // filter: Joi.string()
+  limit: Joi.string().pattern(regLimit).optional(),
+  skip: Joi.number().min(0).optional(),
+  sortBy: Joi.string().valid('sum', 'date', 'category').optional(),
+  sortByDesc: Joi.string().valid('sum', 'date', 'category').optional(),
+  filter: Joi.string()
     // eslint-disable-next-line prefer-regex-literals
-    // .pattern(new RegExp('(sum|date|type)\\|?(sum|date|type)+'))
-    // .optional(),
+    .pattern(new RegExp('(sum|date|category)\\|?(sum|date|category)+'))
+    .optional(),
 })
 
 export const validateCreate = async (req, res, next) => {

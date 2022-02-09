@@ -8,7 +8,7 @@ const getTransactions = async (
     sortBy,
     sortByDesc,
     filter,
-    limit = 1000,
+    limit = 9,
     skip = 0
   },
 ) => {
@@ -16,7 +16,7 @@ const getTransactions = async (
   const total = await Transaction.find({ owner: userId }).countDocuments()
   let result = Transaction.find({ owner: userId }).populate({
     path: 'owner',
-    select: 'type date category',
+    select: 'type date description category sum',
   })
   if (sortBy) {
     sortCriteria = { [`${sortBy}`]: 1 }

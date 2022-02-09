@@ -16,7 +16,7 @@ class AuthService {
       name,
       email,
       avatar,
-      verifyTokenEmail,
+      // verifyTokenEmail,
     }
   }
 
