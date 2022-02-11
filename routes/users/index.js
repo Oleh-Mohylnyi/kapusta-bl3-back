@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import {
-  aggregation,
   uploadAvatar,
   verifyUser,
   repeatEmailForVerifyUser,
@@ -13,11 +12,6 @@ const router = new Router()
 
 router.get('/verify/:token', wrapperError(verifyUser))
 router.post('/verify', wrapperError(repeatEmailForVerifyUser))
-router.patch(
-  '/avatar',
-  guard,
-  upload.single('avatar'),
-  wrapperError(uploadAvatar),
-)
+router.patch('/avatar',guard, upload.single('avatar'), wrapperError(uploadAvatar))
 
 export default router

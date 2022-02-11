@@ -9,7 +9,7 @@ const createSchema = Joi.object({
     category: Joi.string().required(),
     date: Joi.date().optional(),
     description: Joi.string().optional(),
-    currency: Joi.string().optional(),
+
 })
 
 const regLimit = /\d+/

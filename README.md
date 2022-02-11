@@ -3,7 +3,7 @@
 - регистрация нового пользователя
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/registration
 обязательные поля body: email, password
-не обязательные поля body: name, avatar
+не обязательные поля body: name, avatar, currency
 ответы: 201 / 409, 429
 
 - верификация почты (ссылка в письме)
@@ -18,6 +18,11 @@ post: https://kapusta-smart-finances.herokuapp.com/api/users/verify
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/login
 email, password - обязательные поля body
 ответы: 200+токен / 401, 
+
+- уточнение данных пользователя
+post: https://kapusta-smart-finances.herokuapp.com/api/auth/current
+нужен токен
+ответы: 200+обьект / 401,
 
 - разлогинизация пользователя
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/logout
