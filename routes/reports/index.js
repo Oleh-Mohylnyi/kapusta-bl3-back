@@ -1,22 +1,20 @@
 import { Router } from 'express'
 import {
-    getBalance,
-    getSummaryIncome
-} from '../../controllers/reports'
+  getBalance,
+  getSummaryIncome,
+  getSummaryCost,
+  getDetailReport
+} from '../../controllers/reports';
 
-import {
-  validateQuery
-} from './validation'
+import { validateQueryDetailReport } from './validation';
+import wrapperError from '../../middlewares/error-handler';
+import guard from '../../middlewares/guard';
 
-import wrapperError from '../../middlewares/error-handler'
-import guard from '../../middlewares/guard'
+const router = new Router();
 
-const router = new Router()
+router.get('/balance', [guard], wrapperError(getBalance));
+router.get('/summary_income', [guard], wrapperError(getSummaryIncome));
+router.get('/summary_cost', [guard], wrapperError(getSummaryCost));
+router.get('/detail', [guard, validateQueryDetailReport], wrapperError(getDetailReport));
 
-router.get('/balance', [guard, validateQuery], wrapperError(getBalance))
-router.get('/summary_income', [guard, validateQuery], wrapperError(getSummaryIncome))
-// router.get('/summary_cost', [guard, validateQuery], wrapperError(getSummaryIncome))
-// router.get('/income/:month', [guard, validateQuery], wrapperError(getSummaryIncome))
-// router.get('/cost/:month', [guard, validateQuery], wrapperError(getSummaryIncome))
-
-export default router
+export default router;

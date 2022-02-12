@@ -55,10 +55,6 @@ const logout = async (req, res, next) => {
 };
 
 const current = async (req, res, next) => {
-  // const user = await authService.getUser(req.user.id);
-  // if (!user) {
-  //   throw new CustomError(HttpCode.UNAUTHORIZED, 'Invalid credentials')
-  // };
   // const token = authService.getToken(user);
   // await authService.setToken(user.id, token);
   const { email, name, avatar } = req.user;

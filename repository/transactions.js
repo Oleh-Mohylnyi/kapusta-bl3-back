@@ -10,7 +10,6 @@ const getTransactions = async (userId, req) => {
     limit = 10,
     skip = 0
   } = req;
-  console.log(req);
   let sortCriteria = {['sum']: 1}
   const total = await Transaction.find({ owner: userId }).countDocuments()
   let result = Transaction.find({ owner: userId }).populate({
