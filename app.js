@@ -4,6 +4,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { HttpCode, LIMIT_JSON } from './lib/constants';
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json';
+
 import transactionsRouter from './routes/transactions';
 import authRouter from './routes/auth';
 import usersRouter from './routes/users';
@@ -29,6 +32,12 @@ app.use('/api/users', usersRouter)
 app.use('/api/transactions', transactionsRouter)
 app.use('/api/reports', reportsRouter)
 app.use('/api/categories', categoriesRouter)
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+)
 
 app.use((req, res) => {
   res
