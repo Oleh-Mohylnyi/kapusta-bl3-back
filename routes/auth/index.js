@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { registration, login, logout, current } from '../../controllers/auth'
+import { registration, login, logout, current, googleAuth, googleRedirect} from '../../controllers/auth'
 import guard from '../../middlewares/guard'
 import limiter from '../../middlewares/rate-limit'
 import wrapperError from '../../middlewares/error-handler'
