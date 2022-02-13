@@ -45,8 +45,8 @@ class EmailService {
     return mailGenerator.generate(email)
   }
 
-  async sendVerifyEmail(email, username, verifyToken) {
-    const emailBody = this.createEmailTemplate(username, verifyToken)
+  async sendVerifyEmail(email, username, verifyTokenEmail) {
+    const emailBody = this.createEmailTemplate(username, verifyTokenEmail)
     const msg = {
       to: email,
       subject: 'Mail verification by Kapu$ta',
@@ -54,7 +54,7 @@ class EmailService {
     }
     try {
       const result = await this.sender.send(msg)
-      // console.log(result)
+      console.log(result)
       return true
     } catch (error) {
       console.error(error.message)

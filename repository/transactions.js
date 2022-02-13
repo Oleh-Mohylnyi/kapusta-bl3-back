@@ -2,21 +2,19 @@ import Transaction from '../model/transaction'
 import pkg from 'mongoose'
 const { Types } = pkg
 
-const getTransactions = async (
-  userId,
-  {
+const getTransactions = async (userId, req) => {
+  const {
     sortBy,
     sortByDesc,
     filter,
-    limit = 1000,
+    limit = 10,
     skip = 0
-  },
-) => {
-  let sortCriteria = null
+  } = req;
+  let sortCriteria = {['sum']: 1}
   const total = await Transaction.find({ owner: userId }).countDocuments()
   let result = Transaction.find({ owner: userId }).populate({
     path: 'owner',
-    select: 'type date category',
+    select: 'type date description category sum',
   })
   if (sortBy) {
     sortCriteria = { [`${sortBy}`]: 1 }

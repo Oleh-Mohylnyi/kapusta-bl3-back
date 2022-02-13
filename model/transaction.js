@@ -7,6 +7,7 @@ const transactionSchema = new Schema(
     type: {
       type: Boolean,
       required: [true, 'Set income or costs'],
+      // true: доход, false: расход
     },
     sum: {
       type: Number,
@@ -25,10 +26,6 @@ const transactionSchema = new Schema(
     description: {
         type: String,
         default: null,
-    },
-    currency: {
-        type: String,
-        default: 'UAH',
     },
     owner: {
         type: SchemaTypes.ObjectId,

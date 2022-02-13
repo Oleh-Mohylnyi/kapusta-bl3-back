@@ -3,7 +3,7 @@
 - регистрация нового пользователя
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/registration
 обязательные поля body: email, password
-не обязательные поля body: name, avatar
+не обязательные поля body: name, avatar, currency
 ответы: 201 / 409, 429
 
 - верификация почты (ссылка в письме)
@@ -19,6 +19,11 @@ post: https://kapusta-smart-finances.herokuapp.com/api/auth/login
 email, password - обязательные поля body
 ответы: 200+токен / 401, 
 
+- рефреш данных пользователя по токену
+post: https://kapusta-smart-finances.herokuapp.com/api/auth/current
+нужен токен
+ответы: 200+обьект / 401,
+
 - разлогинизация пользователя
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/logout
 нужен токен
@@ -33,19 +38,6 @@ patch: https://kapusta-smart-finances.herokuapp.com/api/users/avatar
 get: https://kapusta-smart-finances.herokuapp.com/api/transactions
 нужен токен
 ответы: 200+список обектов / 401
-
-- добавление транзакции
-post: https://kapusta-smart-finances.herokuapp.com/api/transactions
-нужен токен
-обязательные поля body: type (true/false), sum, category
-не обязательные поля body: date, description, currency
-ответы: 200+обьект / 400
-
-- удаление транзакции
-delete: https://kapusta-smart-finances.herokuapp.com/api/transactions/:id
-нужен токен
-ответы: 200+обьект / 404
-
 пример ответа с перечнем транзакций:
 {
     "status": "success",
@@ -84,3 +76,76 @@ delete: https://kapusta-smart-finances.herokuapp.com/api/transactions/:id
         ]
     }
 }
+
+- добавление транзакции
+post: https://kapusta-smart-finances.herokuapp.com/api/transactions
+нужен токен
+обязательные поля body: type (true/false), sum, category
+не обязательные поля body: date, description
+ответы: 200+обьект / 400
+
+- удаление транзакции
+delete: https://kapusta-smart-finances.herokuapp.com/api/transactions/:id
+нужен токен
+ответы: 200+обьект / 404
+
+- получение баланса пользователя
+get: https://kapusta-smart-finances.herokuapp.com/api/reports/balance
+нужен токен
+ответ:
+{
+    "status": "success",
+    "code": 200,
+    "data": {
+        "balance": {
+            "total": [
+                {
+                    "_id": false,
+                    "total": 6000
+                },
+                {
+                    "_id": true,
+                    "total": 80000
+                }
+            ]
+        }
+    }
+}
+
+- получение сводки с доходами по месяцам
+get: https://kapusta-smart-finances.herokuapp.com/api/reports/summary_income
+нужен токен
+ответ: (уже отсортировано по убыванию)
+{
+    "status": "success",
+    "code": 200,
+    "data": {
+        "0": {
+            "_id": {
+                "month": 2,
+                "year": 2022,
+                "type": "true"
+            },
+            "totalValue": 122000
+        },
+        "1": {
+            "_id": {
+                "month": 1,
+                "year": 2022,
+                "type": "true"
+            },
+            "totalValue": 16000
+        }
+    }
+}
+
+- получение сводки с расходами по месяцам
+get: https://kapusta-smart-finances.herokuapp.com/api/reports/summary_cost
+нужен токен
+ответ: аналогичен сводке с доходами, только тип: false
+
+- получение детальной информации по доходам и расходам за месяц
+get: https://kapusta-smart-finances.herokuapp.com/api/reports/detail?year=2022&month=2
+нужен токен, в параметрах запроса: год, месяц
+ответ: 
+

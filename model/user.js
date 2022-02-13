@@ -25,6 +25,10 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Set password for user'],
     },
+    currency: {
+        type: String,
+        default: 'UAH',
+    },
     token: {
       type: String,
       default: null,

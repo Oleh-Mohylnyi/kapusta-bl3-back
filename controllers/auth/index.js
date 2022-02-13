@@ -7,7 +7,6 @@ import {
 } from '../../service/email'
 import { CustomError } from '../../lib/custom-error'
 import cryptoRandomString from 'crypto-random-string'
-// import User from '../../model/user'
 
 const registration = async (req, res, next) => {
   
@@ -15,13 +14,10 @@ const registration = async (req, res, next) => {
   const isUserExist = await authService.isUserExist(email)
   if (isUserExist) {
     throw new CustomError(HttpCode.CONFLICT, 'Email is already exist')
-  }
-  let verifyTokenEmail = cryptoRandomString({ length: 24, type: 'base64' })
-  const userData = await authService.create({ ...req.body, verifyTokenEmail })
-  // User.updateOne(
-  //   { _id: userData.id },
-  //   { verifyTokenEmail: verifyTokenEmail },
-  // )
+
+  };
+  let verifyTokenEmail = cryptoRandomString({ length: 24, type: 'base64' });
+  const userData = await authService.create({ ...req.body, verifyTokenEmail });
   const emailService = new EmailService(
     process.env.NODE_ENV,
     new SenderNodemailer(),
@@ -29,9 +25,10 @@ const registration = async (req, res, next) => {
   const isSend = await emailService.sendVerifyEmail(
     email,
     userData.name,
-    userData.verifyTokenEmail,
-  )
-  delete userData.verifyTokenEmail
+
+    verifyTokenEmail,
+  );
+  // delete userData.verifyTokenEmail
   res.status(HttpCode.CREATED).json({
     status: 'success',
     code: HttpCode.CREATED,
@@ -45,13 +42,15 @@ const login = async (req, res, next) => {
   const user = await authService.getUser(email, password)
   if (!user) {
     throw new CustomError(HttpCode.UNAUTHORIZED, 'Invalid credentials')
-  }
-  const token = authService.getToken(user)
-  await authService.setToken(user.id, token)
+
+  };
+  const token = authService.getToken(user);
+  await authService.setToken(user.id, token);
+  const { name, avatar } = user;
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { token, email } })
-}
+    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, token}  })
+};
 
 const logout = async (req, res, next) => {
   await authService.setToken(req.user.id, null)
@@ -158,3 +157,13 @@ const googleRedirect = async (req, res) => {
 }
 
 export { registration, login, logout, googleAuth, googleRedirect }
+const current = async (req, res, next) => {
+  // const token = authService.getToken(user);
+  // await authService.setToken(user.id, token);
+  const { email, name, avatar } = req.user;
+  res
+    .status(HttpCode.OK)
+    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar}  })
+};
+
+export { registration, login, logout, current };
