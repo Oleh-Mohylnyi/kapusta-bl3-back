@@ -11,4 +11,10 @@ router.post('/login', wrapperError(login))
 router.post('/logout', guard, wrapperError(logout))
 router.get('/current', guard, wrapperError(current))
 
+// router.get('./current', wrapperError(current))
+router.get('./google', wrapperError(googleAuth))
+
+router.get('./google-redirect', wrapperError(googleRedirect))
+
+
 export default router
