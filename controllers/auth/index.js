@@ -156,7 +156,6 @@ const googleRedirect = async (req, res) => {
 
 }
 
-export { registration, login, logout, googleAuth, googleRedirect }
 const current = async (req, res, next) => {
   // const token = authService.getToken(user);
   // await authService.setToken(user.id, token);
@@ -164,6 +163,6 @@ const current = async (req, res, next) => {
   res
     .status(HttpCode.OK)
     .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar}  })
-};
-
-export { registration, login, logout, current };
+  };
+  
+  export { registration, login, logout, googleAuth, googleRedirect, current }
