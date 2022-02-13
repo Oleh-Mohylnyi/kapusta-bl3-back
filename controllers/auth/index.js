@@ -146,6 +146,7 @@ const googleRedirect = async (req, res) => {
   // return res.redirect(
   //   `${FRONTEND_URL}/google-redirect?email=${user.email}`
   // )
+
   
   return res.redirect(
     // `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
