@@ -9,15 +9,13 @@ import { CustomError } from '../../lib/custom-error'
 import cryptoRandomString from 'crypto-random-string'
 
 const registration = async (req, res, next) => {
-  
   const { email } = req.body
   const isUserExist = await authService.isUserExist(email)
   if (isUserExist) {
     throw new CustomError(HttpCode.CONFLICT, 'Email is already exist')
-
-  };
-  let verifyTokenEmail = cryptoRandomString({ length: 24, type: 'base64' });
-  const userData = await authService.create({ ...req.body, verifyTokenEmail });
+  }
+  let verifyTokenEmail = cryptoRandomString({ length: 24, type: 'base64' })
+  const userData = await authService.create({ ...req.body, verifyTokenEmail })
   const emailService = new EmailService(
     process.env.NODE_ENV,
     new SenderNodemailer(),
@@ -27,14 +25,13 @@ const registration = async (req, res, next) => {
     userData.name,
 
     verifyTokenEmail,
-  );
+  )
   // delete userData.verifyTokenEmail
   res.status(HttpCode.CREATED).json({
     status: 'success',
     code: HttpCode.CREATED,
-    data: { ...userData, isSendEmailVerify: isSend},
+    data: { ...userData, isSendEmailVerify: isSend },
   })
-
 }
 
 const login = async (req, res, next) => {
@@ -42,15 +39,18 @@ const login = async (req, res, next) => {
   const user = await authService.getUser(email, password)
   if (!user) {
     throw new CustomError(HttpCode.UNAUTHORIZED, 'Invalid credentials')
-
-  };
-  const token = authService.getToken(user);
-  await authService.setToken(user.id, token);
-  const { name, avatar } = user;
+  }
+  const token = authService.getToken(user)
+  await authService.setToken(user.id, token)
+  const { name, avatar } = user
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, token}  })
-};
+    .json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: { name, email, avatar, token },
+    })
+}
 
 const logout = async (req, res, next) => {
   await authService.setToken(req.user.id, null)
@@ -66,8 +66,6 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import jwt from 'jsonwebtoken'
 import User from '../../model/user'
-// import URL from 'url'
-
 
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
@@ -75,49 +73,51 @@ const googleAuth = async (req, res) => {
     redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
     // redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
     scope: [
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile",
-    ].join(" "),
-    response_type: "code",
-    access_type: "offline",
-    prompt: "consent",
-  });
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ].join(' '),
+    response_type: 'code',
+    access_type: 'offline',
+    prompt: 'consent',
+  })
   return res.redirect(
-    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
-  );
-};
+    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`,
+  )
+}
 
 const googleRedirect = async (req, res) => {
-    const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
-    const urlObj = new URL(fullUrl);
-    const urlParams = queryString.parse(urlObj.search);
-    const code = urlParams.code;
-    const tokenData = await axios({
-      url: `https://oauth2.googleapis.com/token`,
-      method: "post",
-      data: {
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
-        // redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
-        grant_type: "authorization_code",
-        code,
-      },
-    });
+  const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
+  const urlObj = new URL(fullUrl)
+  const urlParams = queryString.parse(urlObj.search)
+  const code = urlParams.code
+  const tokenData = await axios({
+    url: `https://oauth2.googleapis.com/token`,
+    method: 'post',
+    data: {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
+      grant_type: 'authorization_code',
+      code,
+    },
+  })
 
   const userData = await axios({
-    url: "https://www.googleapis.com/oauth2/v2/userinfo",
-    method: "get",
+    url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+    method: 'get',
     headers: {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
-  });
-
+  })
 
   // -------------------Логика-------------------
 
   const { email, picture, id } = userData.data
-  // let user = await User.findOne({ email })
+  console.log(userData.data)
+
+  let user = await User.findOne({ email })
+  console.log('user', user)
+
   // if (!user) {
   //   const verifyToken = nanoid()
   //   const password = nanoid(32)
@@ -126,44 +126,35 @@ const googleRedirect = async (req, res) => {
   //   await user.save()
   // }
 
-  // const payload = {
-  //   email,
-  // }
-  // const token = jwt.sign(payload, JWT_SECRET_KEY)
+  const payload = {
+    email
+  }
+  console.log('payload',payload);
+
+  const token = jwt.sign(payload, process.env.JWT_SECRET_KEY)
+  console.log('token=', token)
 
   // await user.update({ token, verifyToken: null, verify: true })
 
-  // user = await User.findByIdAndUpdate(user._id, { token });
-  
-  
-  
-  // user = await User.findByIdAndUpdate(user._id, { token });
+  user = await User.findByIdAndUpdate(user._id, { token });
+  console.log('Итог=', user);
 
-
-
-
-  // return res.redirect(
-  //   `${FRONTEND_URL}/google-redirect?email=${user.email}`
-  // )
-
-  
   return res.redirect(
-    `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
-    // `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
-    // `${process.env.FRONTEND_URL}`
+    `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
   )
-
-  
-
 }
 
 const current = async (req, res, next) => {
   // const token = authService.getToken(user);
   // await authService.setToken(user.id, token);
-  const { email, name, avatar } = req.user;
+  const { email, name, avatar } = req.user
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar}  })
-  };
-  
-  export { registration, login, logout, googleAuth, googleRedirect, current }
+    .json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: { name, email, avatar },
+    })
+}
+
+export { registration, login, logout, googleAuth, googleRedirect, current }
