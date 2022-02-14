@@ -25,7 +25,6 @@ const registration = async (req, res, next) => {
   const isSend = await emailService.sendVerifyEmail(
     email,
     userData.name,
-
     verifyTokenEmail,
   );
   // delete userData.verifyTokenEmail
@@ -46,10 +45,10 @@ const login = async (req, res, next) => {
   };
   const token = authService.getToken(user);
   await authService.setToken(user.id, token);
-  const { name, avatar } = user;
+  const { name, avatar, balance } = user;
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, token}  })
+    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, balance, token}  })
 };
 
 const logout = async (req, res, next) => {
@@ -148,8 +147,8 @@ const googleRedirect = async (req, res) => {
 
   
   return res.redirect(
-    `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
-    // `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
+    // `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
+    `${process.env.FRONTEND_URL}/api/auth/google-redirect?token=${token}`
     // `${process.env.FRONTEND_URL}`
   )
 

@@ -15,3 +15,19 @@ export const validateQueryDetailReport = async (req, res, next) => {
   }
   next()
 }
+
+
+const createSchema = Joi.object({
+    balance: Joi.number().min(0).required(),
+})
+
+export const validateCreate = async (req, res, next) => {
+  try {
+    await createSchema.validateAsync(req.body)
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ code: 400, message: `Field ${err.message.replace(/"/g, '')}` })
+  }
+  next()
+}

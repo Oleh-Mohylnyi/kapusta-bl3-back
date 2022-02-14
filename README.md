@@ -1,5 +1,9 @@
 # kapusta-bl3-back
 
+https://kapusta-smart-finances.herokuapp.com/api-docs/ 
+документация бекэнда
+
+
 - регистрация нового пользователя
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/registration
 обязательные поля body: email, password
@@ -18,6 +22,17 @@ post: https://kapusta-smart-finances.herokuapp.com/api/users/verify
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/login
 email, password - обязательные поля body
 ответы: 200+токен / 401, 
+{
+    "status": "success",
+    "code": 200,
+    "data": {
+        "name": "Guest",
+        "email": "notDelete@test.com",
+        "avatar": "https://s.gravatar.com/avatar/9d824df4591788970910476f86defe43?s=250",
+        "balance": null,
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMDJkOWM5YmI3MDJjNzBhYTE5N2ZmOCIsImVtYWlsIjoibm90RGVsZXRlQHRlc3QuY29tIiwiaWF0IjoxNjQ0ODMzOTg0LCJleHAiOjE2NDQ5MjAzODR9.1Vf3Nxkmmm0wBREg_1vb8udzaNevh8v9tfJ7CQ6pbmA"
+    }
+}
 
 - рефреш данных пользователя по токену
 post: https://kapusta-smart-finances.herokuapp.com/api/auth/current

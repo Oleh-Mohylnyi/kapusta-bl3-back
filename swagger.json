@@ -1,9 +1,9 @@
 {
-    "openapi": "3.0.1",
+    "openapi": "1.0.0",
     "info": {
-        "version": "2.0.0",
-        "title": "Kapusta API docs",
-        "description": "API documentation for GoIT project 'Kapusta'",
+        "version": "1.0.0",
+        "title": "kapusta-smart-finances",
+        "description": "API documentation for GoIT project 'kapusta smart finances' by 'Easygoing' team",
         "license": {
             "name": "MIT",
             "url": "https://opensource.org/licenses/MIT"
@@ -17,7 +17,7 @@
     ],
     "servers": [
         {
-            "url": "https://localhoct:4000"
+            "url": "https://kapusta-smart-finances.herokuapp.com/"
         }
     ],
     "tags": [

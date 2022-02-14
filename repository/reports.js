@@ -1,4 +1,5 @@
 import Transaction from '../model/transaction'
+import User from '../model/user'
 import pkg from 'mongoose'
 const { Types } = pkg
 
@@ -15,6 +16,16 @@ const getBalance = async (id) => {
     ]);
     return { ...total }
 }
+
+const updateBalance = async (userId, body) => {
+    const {balance} = body
+    const result = await Contact.updateOne(
+    { _id: userId },
+    { balance },
+  )
+  return result
+}
+
 
 const getSummaryIncome = async (id) => {
     const summary = await Transaction.aggregate([
@@ -113,6 +124,7 @@ const getDetailReport = async (id, req) => {
 
 export default {
     getBalance,
+    updateBalance,
     getSummaryIncome,
     getSummaryCost,
     getDetailReport

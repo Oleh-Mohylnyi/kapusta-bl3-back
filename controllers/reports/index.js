@@ -10,6 +10,26 @@ const getBalance = async (req, res, next) => {
     .json({ status: 'success', code: HttpCode.OK, data: { ...balance } });
 }
 
+const updateBalance = async (req, res, next) => {
+  const { id: userId } = req.user;
+  const balance = await repository.updateBalance(userId, req.body);
+  res.status(HttpCode.CREATED).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { balance },
+  });
+
+
+  
+  // const contact = await repositoryContacts.updateContact(userId, id, req.body)
+  // if (contact) {
+  //   return res
+  //     .status(HttpCode.OK)
+  //     .json({ status: 'success', code: HttpCode.OK, data: { contact } })
+  // }
+  // throw new CustomError(HttpCode.NOT_FOUND, 'Not found')
+}
+
 const getSummaryIncome = async (req, res, next) => {
   const { id: userId } = req.user;
   const summaryIncome = await repository.getSummaryIncome(userId);
@@ -36,4 +56,4 @@ const getDetailReport = async (req, res, next) => {
 }
 
 
-export { getBalance, getSummaryIncome, getSummaryCost, getDetailReport }
+export { getBalance, updateBalance, getSummaryIncome, getSummaryCost, getDetailReport }
