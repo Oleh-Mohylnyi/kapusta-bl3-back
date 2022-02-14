@@ -6,17 +6,50 @@ const { Types } = pkg
 
 const getBalance = async (id) => {
     const user = await User.find({ _id: id })
-    // const {balance: initialBalance} = user
-    console.log(user.balance)
+    const { balance: initialBalance } = user[0]
+    // const incomesfromDB = await Transaction.aggregate([
+    //     { $match: { owner: Types.ObjectId(id) } },
+    //     {
+    //         $group: {
+    //             _id: { type: 'true' },
+    //             total: { $sum: '$sum' },
+    //         }
+    //     }
+    // ]);
+    // const { total: incomes } = incomesfromDB[0]
+    // const costsfromDB = await Transaction.aggregate([
+    //     { $match: { owner: Types.ObjectId(id) } },
+    //     {
+    //         $group: {
+    //             _id: { type: 'false' },
+    //             total: { $sum: '$sum' },
+    //         }
+    //     }
+    // ]);
+    // const { total: costs } = costsfromDB[0]
+    const incomesfromDB = null
+    const costsfromDB = null
     const total = await Transaction.aggregate([
         { $match: { owner: Types.ObjectId(id)} },
         {$group: {
             _id: '$type',
             total: { $sum: '$sum' },
-            // balance: { $subtract: [{_id: true},{_id: false} ] },    
-            }
         }
+    }
     ]);
+    total.forEach(({ _id, total }) => {
+        console.log(_id);
+        console.log(total);
+        // if (_id === true) {
+        //     incomesfromDB = total
+        // }
+        // if (_id === false) {
+        //     costsfromDB = total
+        // }
+    })
+    console.log(total)
+    console.log(incomesfromDB)
+    console.log(costsfromDB)
     return { ...total }
 }
 
