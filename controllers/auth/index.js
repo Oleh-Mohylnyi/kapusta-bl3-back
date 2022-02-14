@@ -71,7 +71,6 @@ const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
     redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
-    // redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
     scope: [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile',
@@ -134,13 +133,17 @@ const googleRedirect = async (req, res) => {
   const token = jwt.sign(payload, process.env.JWT_SECRET_KEY)
   console.log('token=', token)
 
-  // await user.update({ token, verifyToken: null, verify: true })
-
   user = await User.findByIdAndUpdate(user._id, { token });
   console.log('Итог=', user);
 
+  console.log('token=',token);
+    console.log('email=',email);
+
   return res.redirect(
-    `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
+    `${process.env.FRONTEND_URL}?token=${token}&email=${email}`
+    // `${process.env.FRONTEND_URL}/google-redirect?token=${token}?email=${email}`
+
+    // `${process.env.FRONTEND_URL}/google-redirect?email=${email}`
   )
 }
 
