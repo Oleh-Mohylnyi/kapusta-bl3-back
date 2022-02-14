@@ -12,7 +12,8 @@ const getBalance = async (req, res, next) => {
 
 const updateBalance = async (req, res, next) => {
   const { id: userId } = req.user;
-  const balance = await repository.updateBalance(userId, req.body);
+  await repository.updateBalance(userId, req.body);
+  const {balance} = req.body
   res.status(HttpCode.CREATED).json({
     status: 'success',
     code: HttpCode.OK,

@@ -116,14 +116,15 @@ const googleRedirect = async (req, res) => {
   // -------------------Логика-------------------
 
   const { email, picture, id } = userData.data
-  // let user = await User.findOne({ email })
-  // if (!user) {
-  //   const verifyToken = nanoid()
+  console.log(userData)
+  let user = await User.findOne({ email })
+  if (!user) {
+    // const verifyToken = nanoid()
   //   const password = nanoid(32)
-  //   user = new User({ id, email, avatarURL: picture, verifyToken })
+    user = new User({ id, email, avatarURL: picture, token: code })
   //   user.setPassword(password)
-  //   await user.save()
-  // }
+    await user.save()
+  }
 
   // const payload = {
   //   email,
@@ -139,11 +140,6 @@ const googleRedirect = async (req, res) => {
   // user = await User.findByIdAndUpdate(user._id, { token });
 
 
-
-
-  // return res.redirect(
-  //   `${FRONTEND_URL}/google-redirect?email=${user.email}`
-  // )
 
   
   return res.redirect(

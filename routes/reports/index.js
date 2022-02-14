@@ -14,7 +14,7 @@ import guard from '../../middlewares/guard';
 const router = new Router();
 
 router.get('/balance', [guard], wrapperError(getBalance));
-router.post('/balance', [guard, validateCreate], wrapperError(updateBalance));
+router.patch('/balance', [guard, validateCreate], wrapperError(updateBalance));
 router.get('/summary_income', [guard], wrapperError(getSummaryIncome));
 router.get('/summary_cost', [guard], wrapperError(getSummaryCost));
 router.get('/detail', [guard, validateQueryDetailReport], wrapperError(getDetailReport));

@@ -104,6 +104,19 @@ delete: https://kapusta-smart-finances.herokuapp.com/api/transactions/:id
 нужен токен
 ответы: 200+обьект / 404
 
+- обновление баланса пользователя
+post: https://kapusta-smart-finances.herokuapp.com/api/reports/balance
+нужен токен
+обязательные поля body: balance
+ответ:
+{
+    "status": "success",
+    "code": 200,
+    "data": {
+        "balance": 20000
+    }
+}
+
 - получение баланса пользователя
 get: https://kapusta-smart-finances.herokuapp.com/api/reports/balance
 нужен токен

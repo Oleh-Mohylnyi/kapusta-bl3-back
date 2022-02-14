@@ -5,6 +5,9 @@ const { Types } = pkg
 
 
 const getBalance = async (id) => {
+    const user = await User.find({ _id: id })
+    // const {balance: initialBalance} = user
+    console.log(user.balance)
     const total = await Transaction.aggregate([
         { $match: { owner: Types.ObjectId(id)} },
         {$group: {
@@ -19,7 +22,7 @@ const getBalance = async (id) => {
 
 const updateBalance = async (userId, body) => {
     const {balance} = body
-    const result = await Contact.updateOne(
+    const result = await User.updateOne(
     { _id: userId },
     { balance },
   )
