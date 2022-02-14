@@ -66,6 +66,7 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import jwt from 'jsonwebtoken'
 import User from '../../model/user'
+import URL from 'url'
 
 
 const googleAuth = async (req, res) => {
@@ -147,8 +148,9 @@ const googleRedirect = async (req, res) => {
 
   
   return res.redirect(
-    `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
+    // `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
     // `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
+    `${process.env.FRONTEND_URL}`
   )
 
   
