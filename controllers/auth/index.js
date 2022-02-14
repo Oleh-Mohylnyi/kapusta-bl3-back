@@ -116,7 +116,6 @@ const googleRedirect = async (req, res) => {
   // -------------------Логика-------------------
 
   const { email, picture, id } = userData.data
-  console.log(email);
   // let user = await User.findOne({ email })
   // if (!user) {
   //   const verifyToken = nanoid()
@@ -148,8 +147,8 @@ const googleRedirect = async (req, res) => {
 
   
   return res.redirect(
-    // `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
-    `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
+    `${process.env.FRONTEND_URL}?email=${userData.data.email}`,
+    // `${process.env.FRONTEND_URL}/google-redirect?token=${token}`
   )
 
   
