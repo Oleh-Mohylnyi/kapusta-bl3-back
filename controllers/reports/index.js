@@ -12,23 +12,17 @@ const getBalance = async (req, res, next) => {
 
 const updateBalance = async (req, res, next) => {
   const { id: userId } = req.user;
-  await repository.updateBalance(userId, req.body);
-  const {balance} = req.body
-  res.status(HttpCode.CREATED).json({
+  const { balance: initialBalance } = await repository.getInitialBalance(userId)
+  const { balance: newBalance } = req.body;
+  const { balance: oldBalance } = await repository.getBalance(userId);
+  const balanceForUpdate = initialBalance + newBalance - oldBalance;
+  await repository.updateBalance(userId, balanceForUpdate);
+  const { balance } = await repository.getBalance(userId);
+  res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
     data: { balance },
   });
-
-
-  
-  // const contact = await repositoryContacts.updateContact(userId, id, req.body)
-  // if (contact) {
-  //   return res
-  //     .status(HttpCode.OK)
-  //     .json({ status: 'success', code: HttpCode.OK, data: { contact } })
-  // }
-  // throw new CustomError(HttpCode.NOT_FOUND, 'Not found')
 }
 
 const getSummaryIncome = async (req, res, next) => {

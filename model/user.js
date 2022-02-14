@@ -31,7 +31,6 @@ const userSchema = new Schema(
     },
     balance: {
       type: Number,
-      min: 0,
       default: null,
     },
     token: {

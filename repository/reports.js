@@ -4,57 +4,34 @@ import pkg from 'mongoose'
 const { Types } = pkg
 
 
-const getBalance = async (id) => {
+const getInitialBalance = async (id) => {
     const user = await User.find({ _id: id })
-    const { balance: initialBalance } = user[0]
-    // const incomesfromDB = await Transaction.aggregate([
-    //     { $match: { owner: Types.ObjectId(id) } },
-    //     {
-    //         $group: {
-    //             _id: { type: 'true' },
-    //             total: { $sum: '$sum' },
-    //         }
-    //     }
-    // ]);
-    // const { total: incomes } = incomesfromDB[0]
-    // const costsfromDB = await Transaction.aggregate([
-    //     { $match: { owner: Types.ObjectId(id) } },
-    //     {
-    //         $group: {
-    //             _id: { type: 'false' },
-    //             total: { $sum: '$sum' },
-    //         }
-    //     }
-    // ]);
-    // const { total: costs } = costsfromDB[0]
-    const incomesfromDB = null
-    const costsfromDB = null
-    const total = await Transaction.aggregate([
-        { $match: { owner: Types.ObjectId(id)} },
-        {$group: {
-            _id: '$type',
-            total: { $sum: '$sum' },
-        }
-    }
-    ]);
-    total.forEach(({ _id, total }) => {
-        console.log(_id);
-        console.log(total);
-        // if (_id === true) {
-        //     incomesfromDB = total
-        // }
-        // if (_id === false) {
-        //     costsfromDB = total
-        // }
-    })
-    console.log(total)
-    console.log(incomesfromDB)
-    console.log(costsfromDB)
-    return { ...total }
+    const { balance } = user[0]
+    return { balance }
 }
 
-const updateBalance = async (userId, body) => {
-    const {balance} = body
+const getBalance = async (id) => {
+    const { balance: initialBalance } = await getInitialBalance(id)
+    let incomesfromDB = null
+    let costsfromDB = null
+    const total = await Transaction.aggregate([
+        { $match: { owner: Types.ObjectId(id)} },
+        {$group: {_id: '$type', total: { $sum: '$sum' }}}
+    ]);
+    total.forEach(({ _id, total }) => {
+        if (_id===true) {
+            incomesfromDB = total
+        }
+        if (_id === false) {
+            costsfromDB = total
+        }
+    })
+    const balance = initialBalance + incomesfromDB - costsfromDB
+    return { balance }
+}
+
+const updateBalance = async (userId, balance) => {
+    // const {balance} = body
     const result = await User.updateOne(
     { _id: userId },
     { balance },
@@ -161,6 +138,7 @@ const getDetailReport = async (id, req) => {
 export default {
     getBalance,
     updateBalance,
+    getInitialBalance,
     getSummaryIncome,
     getSummaryCost,
     getDetailReport

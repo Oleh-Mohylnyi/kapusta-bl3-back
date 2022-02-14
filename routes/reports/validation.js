@@ -18,7 +18,7 @@ export const validateQueryDetailReport = async (req, res, next) => {
 
 
 const createSchema = Joi.object({
-    balance: Joi.number().min(0).required(),
+    balance: Joi.number().required(),
 })
 
 export const validateCreate = async (req, res, next) => {

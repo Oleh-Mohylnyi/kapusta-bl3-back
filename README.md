@@ -88,7 +88,8 @@ get: https://kapusta-smart-finances.herokuapp.com/api/transactions
                 "updatedAt": "2022-02-05T20:34:36.231Z",
                 "id": "61fedf5c9dc52c5d6db212b3"
             }
-        ]
+        ],
+        "balance": 124000
     }
 }
 
@@ -125,18 +126,7 @@ get: https://kapusta-smart-finances.herokuapp.com/api/reports/balance
     "status": "success",
     "code": 200,
     "data": {
-        "balance": {
-            "total": [
-                {
-                    "_id": false,
-                    "total": 6000
-                },
-                {
-                    "_id": true,
-                    "total": 80000
-                }
-            ]
-        }
+        "balance": 124000
     }
 }
 

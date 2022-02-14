@@ -7,6 +7,7 @@ import {
 } from '../../service/email'
 import { CustomError } from '../../lib/custom-error'
 import cryptoRandomString from 'crypto-random-string'
+import repositoryReports from '../../repository/reports'
 
 const registration = async (req, res, next) => {
   
@@ -14,7 +15,6 @@ const registration = async (req, res, next) => {
   const isUserExist = await authService.isUserExist(email)
   if (isUserExist) {
     throw new CustomError(HttpCode.CONFLICT, 'Email is already exist')
-
   };
   let verifyTokenEmail = cryptoRandomString({ length: 24, type: 'base64' });
   const userData = await authService.create({ ...req.body, verifyTokenEmail });
@@ -45,10 +45,19 @@ const login = async (req, res, next) => {
   };
   const token = authService.getToken(user);
   await authService.setToken(user.id, token);
-  const { name, avatar, balance } = user;
+  const { name, avatar } = user;
+  const { balance } = await repositoryReports.getInitialBalance(user.id);
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, balance, token}  })
+    .json({
+      status: 'success', code: HttpCode.OK, data: {
+        name,
+        email,
+        avatar,
+        balance,
+        token
+      }
+    })
 };
 
 const logout = async (req, res, next) => {
