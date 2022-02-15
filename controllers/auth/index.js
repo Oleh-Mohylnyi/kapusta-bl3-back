@@ -155,7 +155,7 @@ const googleRedirect = async (req, res) => {
 
 const verifyToken = (token) => {
   try {
-    const verify = jwt.verify(token, SECRET_KEY)
+    const verify = jwt.verify(token, process.env.JWT_SECRET_KEY)
     return !!verify
   } catch (e) {
     return false
@@ -163,7 +163,6 @@ const verifyToken = (token) => {
 }
 
 const current = async (req, res, next) => {
-
   const token = req.get('authorization')?.split(' ')[1];
   const isValidToken = verifyToken(token);
   if (!isValidToken) {
@@ -175,16 +174,14 @@ const current = async (req, res, next) => {
   }
   const payload = jwt.decode(token)
   const user = await repositoryUsers.findByEmail(payload.email)
-
-  // const { balance } = await repositoryReports.getBalance(user.id)
-
+  const { balance } = await repositoryReports.getBalance(user.id)
   const { email, name, avatar } = user
   res
     .status(HttpCode.OK)
     .json({
       status: 'success',
       code: HttpCode.OK,
-      data: { email, name, avatar },
+      data: { email, name, avatar, balance },
     })
 }
 
