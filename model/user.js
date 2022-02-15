@@ -29,6 +29,10 @@ const userSchema = new Schema(
         type: String,
         default: 'UAH',
     },
+    balance: {
+      type: Number,
+      default: 0,
+    },
     token: {
       type: String,
       default: null,

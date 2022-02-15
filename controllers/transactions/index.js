@@ -1,13 +1,15 @@
 import repositoryTransactions from '../../repository/transactions'
 import { HttpCode } from '../../lib/constants'
 import { CustomError } from '../../lib/custom-error'
+import repositoryReports from '../../repository/reports'
 
 const getTransactions = async (req, res, next) => {
   const { id: userId } = req.user;
   const transactions = await repositoryTransactions.getTransactions(userId, req.query);
+  const { balance } = await repositoryReports.getBalance(userId);
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { ...transactions } });
+    .json({ status: 'success', code: HttpCode.OK, data: { ...transactions, balance } });
 }
 
 

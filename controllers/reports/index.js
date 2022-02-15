@@ -10,6 +10,21 @@ const getBalance = async (req, res, next) => {
     .json({ status: 'success', code: HttpCode.OK, data: { ...balance } });
 }
 
+const updateBalance = async (req, res, next) => {
+  const { id: userId } = req.user;
+  const { balance: initialBalance } = await repository.getInitialBalance(userId)
+  const newBalance = Number(req.body.balance);
+  const { balance: oldBalance } = await repository.getBalance(userId);
+  const balanceForUpdate = initialBalance + newBalance - oldBalance;
+  await repository.updateBalance(userId, balanceForUpdate);
+  const { balance } = await repository.getBalance(userId);
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { balance },
+  });
+}
+
 const getSummaryIncome = async (req, res, next) => {
   const { id: userId } = req.user;
   const summaryIncome = await repository.getSummaryIncome(userId);
@@ -36,4 +51,4 @@ const getDetailReport = async (req, res, next) => {
 }
 
 
-export { getBalance, getSummaryIncome, getSummaryCost, getDetailReport }
+export { getBalance, updateBalance, getSummaryIncome, getSummaryCost, getDetailReport }

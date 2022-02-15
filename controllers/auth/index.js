@@ -25,7 +25,6 @@ const registration = async (req, res, next) => {
   const isSend = await emailService.sendVerifyEmail(
     email,
     userData.name,
-
     verifyTokenEmail,
   )
   // delete userData.verifyTokenEmail
@@ -41,16 +40,25 @@ const login = async (req, res, next) => {
   const user = await authService.getUser(email, password)
   if (!user) {
     throw new CustomError(HttpCode.UNAUTHORIZED, 'Invalid credentials')
-  }
-  const token = authService.getToken(user)
-  await authService.setToken(user.id, token)
-  const { name, avatar } = user
-  res.status(HttpCode.OK).json({
-    status: 'success',
-    code: HttpCode.OK,
-    data: { name, email, avatar, token },
-  })
-}
+
+
+  };
+  const token = authService.getToken(user);
+  await authService.setToken(user.id, token);
+  const { name, avatar } = user;
+  const { balance } = await repositoryReports.getBalance(user.id);
+  res
+    .status(HttpCode.OK)
+    .json({
+      status: 'success', code: HttpCode.OK, data: {
+        name,
+        email,
+        avatar,
+        balance,
+        token
+      }
+    })
+};
 
 const logout = async (req, res, next) => {
   await authService.setToken(req.user.id, null)
@@ -122,9 +130,10 @@ const googleRedirect = async (req, res) => {
   //   const password = nanoid(32)
   //   // user = new User({ email, verifyToken })
   //    // user = new User({ id, email, avatarURL: picture, verifyToken })
+
   //   user.setPassword(password)
-  //   await user.save()
-  // }
+    await user.save()
+  }
 
   const payload = {
     email,
@@ -136,6 +145,7 @@ const googleRedirect = async (req, res) => {
   return res.redirect(
     `${process.env.FRONTEND_URL}?token=${token}&email=${email}`,
     // `${process.env.FRONTEND_URL}/google-redirect?token=${token}?email=${email}`
+
 
     // `${process.env.FRONTEND_URL}/google-redirect?email=${email}`
   )
@@ -150,11 +160,20 @@ const verifyToken = (token) => {
   }
 }
 
-const current = async (req, res, next) => {
-  const token = req.get('authorization')?.split(' ')[1]
+const verifyToken = (token) => {
+  try {
+    const verify = jwt.verify(token, SECRET_KEY)
+    return !!verify
+  } catch (e) {
+    return false
+  }
+}
 
-  const isValidToken = verifyToken(token)
-   if (!isValidToken) {
+const current = async (req, res, next) => {
+
+  const token = req.get('authorization')?.split(' ')[1];
+  const isValidToken = verifyToken(token);
+  if (!isValidToken) {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: 'error',
       code: HttpCode.UNAUTHORIZED,
@@ -177,3 +196,4 @@ const current = async (req, res, next) => {
 }
 
 export { registration, login, logout, googleAuth, googleRedirect, current }
+

@@ -1,20 +1,44 @@
 import Transaction from '../model/transaction'
+import User from '../model/user'
 import pkg from 'mongoose'
 const { Types } = pkg
 
 
+const getInitialBalance = async (id) => {
+    const user = await User.find({ _id: id })
+    const { balance } = user[0]
+    return { balance }
+}
+
 const getBalance = async (id) => {
+    const { balance: initialBalance } = await getInitialBalance(id)
+    let incomesfromDB = 0
+    let costsfromDB = 0
     const total = await Transaction.aggregate([
         { $match: { owner: Types.ObjectId(id)} },
-        {$group: {
-            _id: '$type',
-            total: { $sum: '$sum' },
-            // balance: { $subtract: [{_id: true},{_id: false} ] },    
-            }
-        }
+        {$group: {_id: '$type', total: { $sum: '$sum' }}}
     ]);
-    return { ...total }
+    total.forEach(({ _id, total }) => {
+        if (_id===true) {
+            incomesfromDB = total
+        }
+        if (_id === false) {
+            costsfromDB = total
+        }
+    })
+    const balance = initialBalance + incomesfromDB - costsfromDB
+    return { balance }
 }
+
+const updateBalance = async (userId, balance) => {
+    // const {balance} = body
+    const result = await User.updateOne(
+    { _id: userId },
+    { balance },
+  )
+  return result
+}
+
 
 const getSummaryIncome = async (id) => {
     const summary = await Transaction.aggregate([
@@ -73,7 +97,7 @@ const getDetailReport = async (id, req) => {
     //     {$sort: { totalValueCategory: -1 }}
     // ]);
 
-        const datailCosts = await Transaction.aggregate([
+    const datailCosts = await Transaction.aggregate([
         {
             $match: {
                 owner: Types.ObjectId(id),
@@ -104,6 +128,21 @@ const getDetailReport = async (id, req) => {
         {$sort: { totalValueCategory: -1 }}
     ]);
 
+
+        // await Transaction.aggregate([
+        //  {$match: {
+        //  owner: id,        
+        //     date : 
+        //           { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
+        //             $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
+        //           }
+        //  }},
+        //  { $group: { _id: { type: '$type' },  totalValue: { $sum: '$sum' } } },
+        //  {
+        //    $project: { _id: 0, type: '$_id.type',  totalValue: '$ totalValue' },
+        //  },
+    // ]
+
     return {
         // ...datailIncomes,
         ...datailCosts
@@ -113,6 +152,8 @@ const getDetailReport = async (id, req) => {
 
 export default {
     getBalance,
+    updateBalance,
+    getInitialBalance,
     getSummaryIncome,
     getSummaryCost,
     getDetailReport
