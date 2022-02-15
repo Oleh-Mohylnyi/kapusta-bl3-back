@@ -13,7 +13,7 @@ const getBalance = async (req, res, next) => {
 const updateBalance = async (req, res, next) => {
   const { id: userId } = req.user;
   const { balance: initialBalance } = await repository.getInitialBalance(userId)
-  const { balance: newBalance } = req.body;
+  const newBalance = Number(req.body.balance);
   const { balance: oldBalance } = await repository.getBalance(userId);
   const balanceForUpdate = initialBalance + newBalance - oldBalance;
   await repository.updateBalance(userId, balanceForUpdate);

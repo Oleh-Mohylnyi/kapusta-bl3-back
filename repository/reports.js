@@ -12,8 +12,8 @@ const getInitialBalance = async (id) => {
 
 const getBalance = async (id) => {
     const { balance: initialBalance } = await getInitialBalance(id)
-    let incomesfromDB = null
-    let costsfromDB = null
+    let incomesfromDB = 0
+    let costsfromDB = 0
     const total = await Transaction.aggregate([
         { $match: { owner: Types.ObjectId(id)} },
         {$group: {_id: '$type', total: { $sum: '$sum' }}}
