@@ -12,7 +12,6 @@ router.post('/logout', guard, wrapperError(logout))
 router.get('/current', wrapperError(current))
 
 router.get('/google', wrapperError(googleAuth))
-
 router.get('/google-redirect', wrapperError(googleRedirect))
 
 
