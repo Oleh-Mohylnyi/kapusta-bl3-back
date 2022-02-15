@@ -7,6 +7,8 @@ import {
 } from '../../service/email'
 import { CustomError } from '../../lib/custom-error'
 import cryptoRandomString from 'crypto-random-string'
+import repositoryReports from '../../repository/reports'
+import repositoryUsers from '../../repository/users'
 
 const registration = async (req, res, next) => {
   const { email } = req.body
@@ -43,17 +45,16 @@ const login = async (req, res, next) => {
   const token = authService.getToken(user)
   await authService.setToken(user.id, token)
   const { name, avatar } = user
-  res
-    .status(HttpCode.OK)
-    .json({
-      status: 'success',
-      code: HttpCode.OK,
-      data: { name, email, avatar, token },
-    })
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { name, email, avatar, token },
+  })
 }
 
 const logout = async (req, res, next) => {
   await authService.setToken(req.user.id, null)
+
   res
     .status(HttpCode.NO_CONTENT)
     .json({ status: 'success', code: HttpCode.OK, data: {} })
@@ -112,43 +113,66 @@ const googleRedirect = async (req, res) => {
   // -------------------Логика-------------------
 
   const { email, picture, id, name } = userData.data
-  console.log(userData.data)
-
   let user = await User.findOne({ email })
+  const avatar = picture
+
 
   // if (!user) {
   //   const verifyToken = nanoid()
   //   const password = nanoid(32)
-  //   user = new User({ id, email, avatarURL: picture, verifyToken })
+  //   // user = new User({ email, verifyToken })
+  //    // user = new User({ id, email, avatarURL: picture, verifyToken })
   //   user.setPassword(password)
   //   await user.save()
   // }
 
   const payload = {
-    email
+    email,
   }
- 
+
   const token = jwt.sign(payload, process.env.JWT_SECRET_KEY)
-  user = await User.findByIdAndUpdate(user._id, { token });
-  
+  user = await User.findByIdAndUpdate(user._id, { token })
+
   return res.redirect(
-    `${process.env.FRONTEND_URL}?token=${token}&email=${email}`
+    `${process.env.FRONTEND_URL}?token=${token}&email=${email}`,
     // `${process.env.FRONTEND_URL}/google-redirect?token=${token}?email=${email}`
 
     // `${process.env.FRONTEND_URL}/google-redirect?email=${email}`
   )
 }
 
+const verifyToken = (token) => {
+  try {
+    const verify = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    return !!verify
+  } catch (e) {
+    return false
+  }
+}
+
 const current = async (req, res, next) => {
-  // const token = authService.getToken(user);
-  // await authService.setToken(user.id, token);
-  const { email, name, avatar } = req.user
+  const token = req.get('authorization')?.split(' ')[1]
+
+  const isValidToken = verifyToken(token)
+   if (!isValidToken) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: 'error',
+      code: HttpCode.UNAUTHORIZED,
+      message: 'Not authorized',
+    })
+  }
+  const payload = jwt.decode(token)
+  const user = await repositoryUsers.findByEmail(payload.email)
+
+  // const { balance } = await repositoryReports.getBalance(user.id)
+
+  const { email, name, avatar } = user
   res
     .status(HttpCode.OK)
     .json({
       status: 'success',
       code: HttpCode.OK,
-      data: { name, email, avatar },
+      data: { email, name, avatar },
     })
 }
 
