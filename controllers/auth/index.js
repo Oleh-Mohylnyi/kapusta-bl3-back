@@ -150,14 +150,7 @@ import User from '../../model/user'
 //     // `${process.env.FRONTEND_URL}/google-redirect?email=${email}`
 //   )
 
-const verifyToken = (token) => {
-  try {
-    const verify = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    return !!verify
-  } catch (e) {
-    return false
-  }
-}
+
 
 const verifyToken = (token) => {
   try {
