@@ -149,7 +149,6 @@ const googleRedirect = async (req, res) => {
 
     // `${process.env.FRONTEND_URL}/google-redirect?email=${email}`
   )
-}
 
 const verifyToken = (token) => {
   try {
