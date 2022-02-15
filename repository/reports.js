@@ -97,7 +97,7 @@ const getDetailReport = async (id, req) => {
     //     {$sort: { totalValueCategory: -1 }}
     // ]);
 
-        const datailCosts = await Transaction.aggregate([
+    const datailCosts = await Transaction.aggregate([
         {
             $match: {
                 owner: Types.ObjectId(id),
