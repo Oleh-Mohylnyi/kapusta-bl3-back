@@ -111,11 +111,10 @@ const googleRedirect = async (req, res) => {
 
   // -------------------Логика-------------------
 
-  const { email, picture, id } = userData.data
+  const { email, picture, id, name } = userData.data
   console.log(userData.data)
 
   let user = await User.findOne({ email })
-  console.log('user', user)
 
   // if (!user) {
   //   const verifyToken = nanoid()
@@ -128,17 +127,10 @@ const googleRedirect = async (req, res) => {
   const payload = {
     email
   }
-  console.log('payload',payload);
-
+ 
   const token = jwt.sign(payload, process.env.JWT_SECRET_KEY)
-  console.log('token=', token)
-
   user = await User.findByIdAndUpdate(user._id, { token });
-  console.log('Итог=', user);
-
-  console.log('token=',token);
-    console.log('email=',email);
-
+  
   return res.redirect(
     `${process.env.FRONTEND_URL}?token=${token}&email=${email}`
     // `${process.env.FRONTEND_URL}/google-redirect?token=${token}?email=${email}`
