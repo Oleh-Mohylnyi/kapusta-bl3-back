@@ -46,7 +46,8 @@ const login = async (req, res, next) => {
   const token = authService.getToken(user);
   await authService.setToken(user.id, token);
   const { name, avatar } = user;
-  const { balance } = await repositoryReports.getInitialBalance(user.id);
+  const { balance } = await repositoryReports.getlBalance(user.id);
+  console.log(balance);
   res
     .status(HttpCode.OK)
     .json({

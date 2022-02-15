@@ -128,6 +128,21 @@ const getDetailReport = async (id, req) => {
         {$sort: { totalValueCategory: -1 }}
     ]);
 
+
+        // await Transaction.aggregate([
+        //  {$match: {
+        //  owner: id,        
+        //     date : 
+        //           { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
+        //             $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
+        //           }
+        //  }},
+        //  { $group: { _id: { type: '$type' },  totalValue: { $sum: '$sum' } } },
+        //  {
+        //    $project: { _id: 0, type: '$_id.type',  totalValue: '$ totalValue' },
+        //  },
+    // ]
+
     return {
         // ...datailIncomes,
         ...datailCosts
