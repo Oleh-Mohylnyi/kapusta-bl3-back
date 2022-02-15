@@ -47,7 +47,6 @@ const login = async (req, res, next) => {
   await authService.setToken(user.id, token);
   const { name, avatar } = user;
   const { balance } = await repositoryReports.getBalance(user.id);
-  console.log(balance);
   res
     .status(HttpCode.OK)
     .json({
@@ -162,13 +161,30 @@ const googleRedirect = async (req, res) => {
 
 }
 
+const verifyToken = (token) => {
+  try {
+    const verify = jwt.verify(token, SECRET_KEY)
+    return !!verify
+  } catch (e) {
+    return false
+  }
+}
+
 const current = async (req, res, next) => {
-  // const token = authService.getToken(user);
-  // await authService.setToken(user.id, token);
+  const token = req.get('authorization')?.split(' ')[1];
+  const isValidToken = verifyToken(token);
+  if (!isValidToken) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: 'error',
+      code: HttpCode.UNAUTHORIZED,
+      message: 'Not authorized',
+    })
+  }
+  const { balance } = await repositoryReports.getBalance(user.id);
   const { email, name, avatar } = req.user;
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar}  })
+    .json({ status: 'success', code: HttpCode.OK, data: { name,  email, avatar, balance}  })
   };
   
   export { registration, login, logout, googleAuth, googleRedirect, current }
