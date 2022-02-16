@@ -80,7 +80,7 @@ const getSummaryCost = async (id) => {
 
 
 
-const getDetailReportZerro = async (id, req) => {
+const getDetailReport = async (id, req) => {
     const {
         month,
         year = 2022
@@ -267,7 +267,7 @@ const getIncomeByDescription = async (id,  category) => {
     return { ...summary }
 }
 
-const getDetailReport = async (id,  category) => {
+const getCostByDescription = async (id,  category) => {
     const summary = await Transaction.aggregate([
         { $match: { 
             owner: Types.ObjectId(id),
