@@ -125,15 +125,15 @@ const googleRedirect = async (req, res) => {
   const avatar = picture
 
 
-  // if (!user) {
-  //   const verifyToken = nanoid()
-  //   const password = nanoid(32)
-  //   // user = new User({ email, verifyToken })
-  //    // user = new User({ id, email, avatarURL: picture, verifyToken })
+  if (!user) {
+    const verifyToken = nanoid()
+    const password = nanoid(32)
+    // user = new User({ email, verifyToken })
+     // user = new User({ id, email, avatarURL: picture, verifyToken })
 
-  //   user.setPassword(password)
-  //   await user.save()
-  // }
+    user.setPassword(password)
+    await user.save()
+  }
 
   const payload = {
     email,
@@ -143,12 +143,15 @@ const googleRedirect = async (req, res) => {
   user = await User.findByIdAndUpdate(user._id, { token })
 
   return res.redirect(
-    `${process.env.FRONTEND_URL}?token=${token}&email=${email}`,
-    // `${process.env.FRONTEND_URL}/google-redirect?token=${token}?email=${email}`
-
-
-    // `${process.env.FRONTEND_URL}/google-redirect?email=${email}`
+    `${process.env.FRONTEND_URL}?token=${token}`,
   )
+    .status(HttpCode.OK)
+    .json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: { email, name, avatar, token },
+    })
+  
 }
 
 
