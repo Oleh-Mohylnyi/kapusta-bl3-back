@@ -41,40 +41,40 @@ const updateBalance = async (userId, balanceForUpdate ) => {
 }
 
 
-const getSummaryIncome = async (id) => {
-    const summary = await Transaction.aggregate([
-        { $match: { owner: Types.ObjectId(id) } },
-        {
-            $group:
-            {
-                _id: { month: { $month: "$date"}, year: { $year: "$date" } , type: "true"},
-                // itemsSold: { $push: { item: "$item", quantity: "$quantity" } }
-                totalValue: { $sum: '$sum' }
-            }
-            // {
-            //     _id: { type: '$type', date: '$date'},
-            // // _id: {$dateToString:{format: '%Y-%m', date: '$date'}},
-            // totalValue: { $sum: '$sum' }
-            // }
-        },
-        {
-            $sort: { date: -1 }
-        }
-    ]);
-    return { ...summary }
-}
+// const getSummaryIncome = async (id) => {
+//     const summary = await Transaction.aggregate([
+//         { $match: { owner: Types.ObjectId(id) } },
+//         {
+//             $group:
+//             {
+//                 _id: { month: { $month: "$date"}, year: { $year: "$date" } , type: "true"},
+//                 // itemsSold: { $push: { item: "$item", quantity: "$quantity" } }
+//                 totalValue: { $sum: '$sum' }
+//             }
+//             // {
+//             //     _id: { type: '$type', date: '$date'},
+//             // // _id: {$dateToString:{format: '%Y-%m', date: '$date'}},
+//             // totalValue: { $sum: '$sum' }
+//             // }
+//         },
+//         {
+//             $sort: { date: -1 }
+//         }
+//     ]);
+//     return { ...summary }
+// }
 
-const getSummaryCost = async (id) => {
-    const summary = await Transaction.aggregate([
-        { $match: { owner: Types.ObjectId(id) } },
-        {$group:{
-                _id: { month: { $month: "$date"}, year: { $year: "$date" } , type: "false"},
-                totalValue: { $sum: '$sum' }
-            }},
-        {$sort: { date: -1 }}
-    ]);
-    return { ...summary }
-}
+// const getSummaryCost = async (id) => {
+//     const summary = await Transaction.aggregate([
+//         { $match: { owner: Types.ObjectId(id) } },
+//         {$group:{
+//                 _id: { month: { $month: "$date"}, year: { $year: "$date" } , type: "false"},
+//                 totalValue: { $sum: '$sum' }
+//             }},
+//         {$sort: { date: -1 }}
+//     ]);
+//     return { ...summary }
+// }
 
 
 
@@ -157,49 +157,49 @@ const getDetailReport = async (id, req) => {
 
 
 
-// const getSummaryIncomeZ = async (id) => {
-//     const summary = await Transaction.aggregate([
-//         { $match: { 
-//             owner: Types.ObjectId(id),
-//             type: "true",
-//             date : 
-//             { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
-//               $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
-//             }
-//          } },
-//         {
-//             $group:
-//             {
-//                 _id: null,              
-//                 totalValue: { $sum: '$sum' }
-//             }
+const getSummaryIncome = async (id) => {
+    const summary = await Transaction.aggregate([
+        { $match: { 
+            owner: Types.ObjectId(id),
+            type: "true",
+            // date : 
+            // { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
+            //   $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
+            // }
+         } },
+        {
+            $group:
+            {
+                _id: null,              
+                totalValue: { $sum: '$sum' }
+            }
             
-//         },      
-//     ]);
-//     return { ...summary }
-// }
+        },      
+    ]);
+    return { ...summary }
+}
 
-// const getSummaryCostZ = async (id) => {
-//     const summary = await Transaction.aggregate([
-//         { $match: { 
-//             owner: Types.ObjectId(id),
-//             type: "false",
-//             date : 
-//             { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
-//               $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
-//             }
-//          } },
-//         {
-//             $group:
-//             {
-//                 _id: null,              
-//                 totalValue: { $sum: '$sum' }
-//             }
+const getSummaryCost = async (id) => {
+    const summary = await Transaction.aggregate([
+        { $match: { 
+            owner: Types.ObjectId(id),
+            type: "false",
+            // date : 
+            // { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
+            //   $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
+            // }
+         } },
+        {
+            $group:
+            {
+                _id: null,              
+                totalValue: { $sum: '$sum' }
+            }
             
-//         },  
-//     ]);
-//     return { ...summary }
-// }
+        },  
+    ]);
+    return { ...summary }
+}
 
 const getIncomeByCategory = async (id) => {
     const summary = await Transaction.aggregate([
