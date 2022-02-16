@@ -7,7 +7,7 @@ const getTransactions = async (userId, req) => {
     sortBy,
     sortByDesc,
     filter,
-    limit = 10,
+    limit = 1000,
     skip = 0
   } = req;
   let sortCriteria = {['sum']: 1}

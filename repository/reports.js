@@ -117,7 +117,8 @@ const getDetailReport = async (id, req) => {
                 _id: {
                     month: { $month: "$date" }, year: { $year: "$date" },
                     // month: { $month:  month}, year: { $year: "$date" },
-                    type: "$type", category: "$category" 
+                    type: "$type",
+                    category: "$category"
                 },
                 totalValueCategory: { $sum: '$sum' },
                 // byDescription: {
@@ -146,7 +147,7 @@ const getDetailReport = async (id, req) => {
         //  {
         //    $project: { _id: 0, type: '$_id.type',  totalValue: '$ totalValue' },
         //  },
-    // ]
+        // ])
 
     return {
         // ...datailIncomes,
@@ -156,7 +157,7 @@ const getDetailReport = async (id, req) => {
 
 
 
-// const getSummaryIncome = async (id) => {
+// const getSummaryIncomeZ = async (id) => {
 //     const summary = await Transaction.aggregate([
 //         { $match: { 
 //             owner: Types.ObjectId(id),
@@ -178,7 +179,7 @@ const getDetailReport = async (id, req) => {
 //     return { ...summary }
 // }
 
-// const getSummaryCost = async (id) => {
+// const getSummaryCostZ = async (id) => {
 //     const summary = await Transaction.aggregate([
 //         { $match: { 
 //             owner: Types.ObjectId(id),
