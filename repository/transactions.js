@@ -11,10 +11,6 @@ const getTransactions = async (userId, req) => {
     skip = 0
   } = req;
   let sortCriteria = { ['date']: -1 }
-  // const total = await Transaction.aggregate([
-  //   { $match: { owner: Types.ObjectId(userId) } },
-  //   { $sort: { data: -1 } }
-  // ])
   const total = await Transaction.find({ owner: userId }).countDocuments()
   let result = Transaction.find({ owner: userId }).populate({
     path: 'owner',
@@ -51,25 +47,8 @@ const addTransaction = async (userId, body) => {
 }
 
 
-// const getStatisticsTransactions = async (id) => {
-//   const data = await Transaction.aggregate([
-//     { $match: { owner: Types.ObjectId(id) } },
-//     {
-//       $group: {
-//         _id: 'qweqwe',
-//         totalAge: { $sum: '$age' },
-//         minAge: { $min: '$age' },
-//         maxAge: { $max: '$age' },
-//         avgAge: { $avg: '$age' },
-//       },
-//     },
-//   ])
-//   return data
-// }
-
 export default {
     getTransactions,
     removeTransaction,
     addTransaction,
-    // getStatisticsTransactions
 }

@@ -36,7 +36,6 @@ class CloudStorage {
     try {
       await unlink(filePath)
     } catch (error) {
-      console.error(error.message)
     }
   }
 }

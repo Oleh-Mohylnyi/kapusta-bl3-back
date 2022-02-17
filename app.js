@@ -4,14 +4,13 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { HttpCode, LIMIT_JSON } from './lib/constants';
 
-// import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json';
 
 import transactionsRouter from './routes/transactions';
 import authRouter from './routes/auth';
 import usersRouter from './routes/users';
-import categoriesRouter from './routes/categories';
+// import categoriesRouter from './routes/categories';
 import reportsRouter from './routes/reports';
 
 const app = express()
@@ -32,7 +31,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/transactions', transactionsRouter)
 app.use('/api/reports', reportsRouter)
-app.use('/api/categories', categoriesRouter)
+// app.use('/api/categories', categoriesRouter)
 
 app.use(
   '/api-docs',

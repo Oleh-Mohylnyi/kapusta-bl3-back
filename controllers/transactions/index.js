@@ -12,7 +12,6 @@ const getTransactions = async (req, res, next) => {
     .json({ status: 'success', code: HttpCode.OK, data: { ...transactions, balance } });
 }
 
-
 const addTransaction = async (req, res, next) => {
   const { id: userId } = req.user;
   const newTransaction = await repositoryTransactions.addTransaction(userId, req.body);

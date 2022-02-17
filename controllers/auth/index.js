@@ -27,7 +27,6 @@ const registration = async (req, res, next) => {
     userData.name,
     verifyTokenEmail,
   )
-  // delete userData.verifyTokenEmail
   res.status(HttpCode.CREATED).json({
     status: 'success',
     code: HttpCode.CREATED,

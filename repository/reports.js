@@ -33,7 +33,6 @@ const getBalance = async (id) => {
 
 const updateBalance = async (userId, balanceForUpdate ) => {
     const balance = Math.round((balanceForUpdate)*100)/100
-    console.log(balance);
     const result = await User.updateOne(
     { _id: userId },
     { balance },
@@ -142,10 +141,8 @@ const getSummaryCost = async (id) => {
 
 // const getDetailReport = async (id, query) => {
 //     const { year, month } = query
-//     console.log(year, month);
 //     const monthFrom = new Date(moment(`${year}-${month}`).startOf('month'));
 //     const monthTo = new Date(moment(`${year}-${month}`).endOf('month'));
-
 //     const summary = await Transaction.aggregate([
 //         {
 //             $match: {
@@ -165,10 +162,8 @@ const getSummaryCost = async (id) => {
 //             $group:
 //             {
 //                 _id: { category: '$category', type: '$type',},  
-                
 //                 totalValue: { $sum: '$sum' },
 //             }
-            
 //         },
 //         // {
 //         //    $project: { _id: 0, category: '$_id.category',  totalValue: '$totalValue', type: '$type', },

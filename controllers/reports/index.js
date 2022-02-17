@@ -53,7 +53,6 @@ const getDetailReport = async (req, res, next) => {
 const getByDescription = async (req, res, next) => {
   const { id } = req.user;
   const { category } = req.query;
-  console.log(req.query);
   const report = await repository.getByDescription(id, category);
   res
     .status(HttpCode.OK)
