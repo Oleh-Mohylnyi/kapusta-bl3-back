@@ -27,7 +27,7 @@ const updateBalance = async (req, res, next) => {
 
 const getSummaryIncome = async (req, res, next) => {
   const { id: userId } = req.user;
-  const summaryIncome = await repository.getSummary(userId, type=true);
+  const summaryIncome = await repository.getSummaryIncome(userId);
   res
     .status(HttpCode.OK)
     .json({ status: 'success', code: HttpCode.OK, data: summaryIncome });
@@ -35,10 +35,10 @@ const getSummaryIncome = async (req, res, next) => {
 
 const getSummaryCost = async (req, res, next) => {
   const { id: userId } = req.user;
-  const summaryCost = await repository.getSummary(userId, type=false);
+  const summaryCost = await repository.getSummaryCost(userId);
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { ...summaryCost } });
+    .json({ status: 'success', code: HttpCode.OK, data: summaryCost });
 }
 
 const getDetailReport = async (req, res, next) => {

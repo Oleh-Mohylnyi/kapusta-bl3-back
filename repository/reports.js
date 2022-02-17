@@ -115,39 +115,45 @@ const updateBalance = async (userId, balanceForUpdate ) => {
 // }
 
 
-const getSummary = async (id, type) => {
-    
-
+const getSummaryIncome = async (id) => {
     const monthFrom = new Date(moment('2021-08').startOf('month'));
     const monthTo = new Date(moment('2022-02').endOf('month'));
-
     const summary = await Transaction.aggregate([
-        {
-            $match: {
-                $and: [
-                    { owner: Types.ObjectId(id) },
-                    { type: type },
-                    // {category: 'Зарплата'},
-                    {date:
-                        {
-                            $gte: monthFrom, //тут указываете с какого числа месяца 
-                        $lt: monthTo //по какое число месяца. 
-                        }
-                    },
+        {$match: {
+            $and: [
+                { owner: Types.ObjectId(id) },
+                { type: true },
+                { date: { $gte: monthFrom,  $lt: monthTo}},
                 ]
-
         }},
-        {
-            $group:
+        {$group:
             {
-                _id: { month: { $month: "$date" }, },  
-                
+                _id: { month: { $month: "$date" }, year: { $year: "$date" },},  
                 totalValue: { $sum: '$sum' },
             }
-            
         },      
     ]);
-    console.log(summary);
+    return summary 
+}
+
+const getSummaryCost = async (id) => {
+    const monthFrom = new Date(moment('2021-08').startOf('month'));
+    const monthTo = new Date(moment('2022-02').endOf('month'));
+    const summary = await Transaction.aggregate([
+        {$match: {
+            $and: [
+                { owner: Types.ObjectId(id) },
+                { type: false },
+                { date: { $gte: monthFrom,  $lt: monthTo}},
+                ]
+        }},
+        {$group:
+            {
+                _id: { month: { $month: "$date" }, year: { $year: "$date" },},  
+                totalValue: { $sum: '$sum' },
+            }
+        },      
+    ]);
     return summary 
 }
 
@@ -166,8 +172,8 @@ const getDetailReport = async (id) => {
                     // {category: 'Зарплата'},
                     {date:
                         {
-                        $gte: monthFrom, //тут указываете с какого числа месяца 
-                        $lt: monthTo //по какое число месяца. 
+                        $gte: monthFrom, 
+                        $lt: monthTo 
                         }
                     },
                 ]
@@ -201,8 +207,8 @@ const getByDescription = async (id,  category) => {
                     {category: category},
                     {date:
                         {
-                        $gte: monthFrom, //тут указываете с какого числа месяца 
-                        $lt: monthTo //по какое число месяца. 
+                        $gte: monthFrom, 
+                        $lt: monthTo 
                         }
                     },
                 ]
@@ -226,7 +232,8 @@ export default {
     getBalance,
     updateBalance,
     getInitialBalance,
-    getSummary,
+    getSummaryIncome,
+    getSummaryCost,
     getDetailReport,
     getByDescription
 }
