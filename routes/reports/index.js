@@ -5,6 +5,7 @@ import {
   getSummaryIncome,
   getSummaryCost,
   getDetailReport,
+  getByDescription
 } from '../../controllers/reports';
 
 import { validateQueryDetailReport, validateCreate } from './validation';
@@ -18,5 +19,6 @@ router.patch('/balance', [guard, validateCreate], wrapperError(updateBalance));
 router.get('/summary_income', [guard], wrapperError(getSummaryIncome));
 router.get('/summary_cost', [guard], wrapperError(getSummaryCost));
 router.get('/detail', [guard, validateQueryDetailReport], wrapperError(getDetailReport));
+router.get('/detail_descriprion', [guard], wrapperError(getByDescription));
 
 export default router;

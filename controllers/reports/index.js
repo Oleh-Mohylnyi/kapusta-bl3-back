@@ -27,15 +27,15 @@ const updateBalance = async (req, res, next) => {
 
 const getSummaryIncome = async (req, res, next) => {
   const { id: userId } = req.user;
-  const summaryIncome = await repository.getSummaryIncome(userId);
+  const summaryIncome = await repository.getSummary(userId, type=true);
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: { ...summaryIncome } });
+    .json({ status: 'success', code: HttpCode.OK, data: summaryIncome });
 }
 
 const getSummaryCost = async (req, res, next) => {
   const { id: userId } = req.user;
-  const summaryCost = await repository.getSummaryCost(userId);
+  const summaryCost = await repository.getSummary(userId, type=false);
   res
     .status(HttpCode.OK)
     .json({ status: 'success', code: HttpCode.OK, data: { ...summaryCost } });
@@ -47,8 +47,17 @@ const getDetailReport = async (req, res, next) => {
   const DetailReport = await repository.getDetailReport(id, req);
   res
     .status(HttpCode.OK)
-    .json({ status: 'success', code: HttpCode.OK, data: {  ...DetailReport } });
+    .json({ status: 'success', code: HttpCode.OK, data: DetailReport  });
 }
 
+const getByDescription = async (req, res, next) => {
+  const { id } = req.user;
+  const { category } = req.query;
+  console.log(req.query);
+  const report = await repository.getByDescription(id, category);
+  res
+    .status(HttpCode.OK)
+    .json({ status: 'success', code: HttpCode.OK, data: report  });
+}
 
-export { getBalance, updateBalance, getSummaryIncome, getSummaryCost, getDetailReport }
+export { getBalance, updateBalance, getSummaryCost, getSummaryIncome, getDetailReport, getByDescription }
