@@ -10,7 +10,11 @@ const getTransactions = async (userId, req) => {
     limit = 1000,
     skip = 0
   } = req;
-  let sortCriteria = {['sum']: 1}
+  let sortCriteria = { ['date']: -1 }
+  // const total = await Transaction.aggregate([
+  //   { $match: { owner: Types.ObjectId(userId) } },
+  //   { $sort: { data: -1 } }
+  // ])
   const total = await Transaction.find({ owner: userId }).countDocuments()
   let result = Transaction.find({ owner: userId }).populate({
     path: 'owner',
