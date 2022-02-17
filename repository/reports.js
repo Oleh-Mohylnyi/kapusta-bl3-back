@@ -42,77 +42,59 @@ const updateBalance = async (userId, balanceForUpdate ) => {
 }
 
 
-// const getDetailReport = async (id, req) => {
-//     const {
-//         month,
-//         year = 2022
-//     } = req;
+const getDetailReport = async (id, query) => {
+    const { year, month } = query
     
-//     // const datailIncomes = await Transaction.aggregate([
-//     //     {
-//     //         $match: {
-//     //             owner: Types.ObjectId(id),
-//     //             $type: "true"
-//     //         },
-//     //     },
-//     //     {
-//     //         $group: {
-//     //             _id: { category: "$category" },
-//     //             totalValueCategory: { $sum: '$sum' },
-//     //         }
-//     //     },
-//     //     {$sort: { totalValueCategory: -1 }}
-//     // ]);
+    // const datailIncomes = await Transaction.aggregate([
+    //     {
+    //         $match: {
+    //             owner: Types.ObjectId(id),
+    //             $type: "true"
+    //         },
+    //     },
+    //     {
+    //         $group: {
+    //             _id: { category: "$category" },
+    //             totalValueCategory: { $sum: '$sum' },
+    //         }
+    //     },
+    //     {$sort: { totalValueCategory: -1 }}
+    // ]);
 
-//     const datailCosts = await Transaction.aggregate([
-//         {
-//             $match: {
-//                 owner: Types.ObjectId(id),
-//                 // month: { $month: `$data` },
-//                 // year: { $year: `${year}` },
-//                 // type: "false"
-//             }
-//         },
-//         {
-//             $group: {
-//                 // _id: { category: "$category" },
-//                 _id: {
-//                     month: { $month: "$date" }, year: { $year: "$date" },
-//                     // month: { $month:  month}, year: { $year: "$date" },
-//                     type: "$type",
-//                     category: "$category"
-//                 },
-//                 totalValueCategory: { $sum: '$sum' },
-//                 // byDescription: {
-//                 //     $push: {
-//                 //         $group: {
-//                 //             _id: { description: "$description" },
-//                 //             totalValueDescription: { $sum: '$sum' },
-//                 //         }
-//                 //     }
-//                 // }
-//             }
-//         },
-//         {$sort: { totalValueCategory: -1 }}
-//     ]);
+    const report = await Transaction.aggregate([
+        {
+            $match: {
+                owner: Types.ObjectId(id),
+                // month: { $month: `$data` },
+                // year: { $year: `${year}` },
+                // type: "false"
+            }
+        },
+        {
+            $group: {
+                // _id: { category: "$category" },
+                _id: {
+                    month: { $month: "$date" }, year: { $year: "$date" },
+                    // month: { $month:  month}, year: { $year: "$date" },
+                    type: "$type",
+                    category: "$category"
+                },
+                totalValueCategory: { $sum: '$sum' },
+                // byDescription: {
+                //     $push: {
+                //         $group: {
+                //             _id: { description: "$description" },
+                //             totalValueDescription: { $sum: '$sum' },
+                //         }
+                //     }
+                // }
+            }
+        },
+        {$sort: { totalValueCategory: -1 }}
+    ]);
 
-
-        // await Transaction.aggregate([
-        //  {$match: {
-        //  owner: id,        
-        //     date : 
-        //           { $gte:'2021-09-01T04:00:00Z', //тут указываете с какого числа месяца 
-        //             $lt: '2021-10-01T04:00:00Z' //по какое число месяца. 
-        //           }
-        //  }},
-        //  { $group: { _id: { type: '$type' },  totalValue: { $sum: '$sum' } } },
-        //  {
-        //    $project: { _id: 0, type: '$_id.type',  totalValue: '$ totalValue' },
-        //  },
-        // ])
-
-//     return datailCosts
-// }
+    return report
+}
 
 
 const getSummaryIncome = async (id) => {
@@ -158,41 +140,42 @@ const getSummaryCost = async (id) => {
 }
 
 
-const getDetailReport = async (id) => {
+// const getDetailReport = async (id, query) => {
+//     const { year, month } = query
+//     console.log(year, month);
+//     const monthFrom = new Date(moment(`${year}-${month}`).startOf('month'));
+//     const monthTo = new Date(moment(`${year}-${month}`).endOf('month'));
 
-    const monthFrom = new Date(moment('2022-02').startOf('month'));
-    const monthTo = new Date(moment('2022-02').endOf('month'));
-
-    const summary = await Transaction.aggregate([
-        {
-            $match: {
-                $and: [
-                    { owner: Types.ObjectId(id) },
-                    // { type: type },
-                    // {category: 'Зарплата'},
-                    {date:
-                        {
-                        $gte: monthFrom, 
-                        $lt: monthTo 
-                        }
-                    },
-                ]
-        }},
-        {
-            $group:
-            {
-                _id: { category: '$category', },  
+//     const summary = await Transaction.aggregate([
+//         {
+//             $match: {
+//                 $and: [
+//                     { owner: Types.ObjectId(id) },
+//                     // { type: type },
+//                     // {category: 'Зарплата'},
+//                     {date:
+//                         {
+//                         $gte: monthFrom, 
+//                         $lt: monthTo 
+//                         }
+//                     },
+//                 ]
+//         }},
+//         {
+//             $group:
+//             {
+//                 _id: { category: '$category', type: '$type',},  
                 
-                totalValue: { $sum: '$sum' },
-            }
+//                 totalValue: { $sum: '$sum' },
+//             }
             
-        },
-        {
-           $project: { _id: 0, category: '$_id.category',  totalValue: '$totalValue' },
-         },
-    ]).sort({ totalValue: 'desc' });
-    return summary
-}
+//         },
+//         // {
+//         //    $project: { _id: 0, category: '$_id.category',  totalValue: '$totalValue', type: '$type', },
+//         //  },
+//     ]).sort({ totalValue: 'desc' });
+//     return summary
+// }
 
 const getByDescription = async (id,  category) => {
     const monthFrom = new Date(moment('2022-02').startOf('month'));

@@ -43,8 +43,8 @@ const getSummaryCost = async (req, res, next) => {
 
 const getDetailReport = async (req, res, next) => {
   const { id } = req.user;
-
-  const DetailReport = await repository.getDetailReport(id, req);
+  const query = req.query;
+  const DetailReport = await repository.getDetailReport(id, query);
   res
     .status(HttpCode.OK)
     .json({ status: 'success', code: HttpCode.OK, data: DetailReport  });
